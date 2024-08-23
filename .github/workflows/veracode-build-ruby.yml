@@ -42,9 +42,18 @@ jobs:
         run: bundle install --path vendor/bundle
 
       - name: Package the Gem
-        run: gem build devise.gemspec
+        run: |
+          
+          gem build devise.gemspec
+
+      # - name: Package the application
+      # id: application_package
+      # env:
+      #   VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
+      #   VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
+      # run: |
 
       - uses: actions/upload-artifact@v4
         with:
           name: veracode-artifact
-          path: veracode.gem
+          path: devise-5.0.0.beta.gem
