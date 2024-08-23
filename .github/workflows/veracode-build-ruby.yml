@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest           #${{ vars.CLIENT_ENV || 'ubuntu-latest' }}
     container:
-      image: veracode/scm-packaging:2.1.0     #adeshlahara/veracode:latest      #${{ vars.CLIENT_IMAGE_URL || 'veracode/scm-packaging' }}:${{ vars.CLIENT_IMAGE_TAG || '2.1.0' }}
+      image: docker:latest     #adeshlahara/veracode:latest      #${{ vars.CLIENT_IMAGE_URL || 'veracode/scm-packaging' }}:${{ vars.CLIENT_IMAGE_TAG || '2.1.0' }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -36,21 +36,27 @@ jobs:
         VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
       run: |
         cd veracode-helper/helper/cli
-        echo "veracode-helper/helper/cli"
-        ls -lart
         cliFile=$(ls -1 . | head -n 1)
         cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
         tar -zxvf $cliFile
         cd $cliFileName
         export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
-        cd /__w/veracode
-        echo "/__w/veracode"
+        #cd /__w/veracode/veracode
+        cd /
+        mkdir test1
+        cd test1
+        cp -r /__w/veracode/veracode .
+        chmod 777 *
         ls -lart
-        echo "/__w/veracode/veracode"
-        cd /__w/veracode/veracode
-        ls -lart
-        echo ls -lart
-        veracode package --source . --output veracode-artifacts --trust --debug
+        #veracode package --source . --output veracode-artifacts --trust --debug
+        docker pull veracode/scm-packaging:2.1.0
+        docker run -v /test1:/files veracode/scm-packaging:2.1.0 ls -lart /files
+        docker run -v /test1:/files veracode/scm-packaging:2.1.0 ls -lart /files/veracode-helper
+        #docker run -v /__w/veracode/veracode:/files veracode/scm-packaging:2.1.0 ls -lart /files/veracode-helper/helper
+        #docker run -v /__w/veracode/veracode:/files veracode/scm-packaging:2.1.0 ls -lart /files/veracode-helper/helper/cli
+        
+        #docker run -v /__w/veracode/veracode:/files veracode/scm-packaging:2.1.0 /files/veracode-helper/helper/cli/$cliFileName/veracode package --source /files --output /files/veracode-artifacts --trust --debug
+        
         zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
 
     - name: Package error
@@ -63,6 +69,41 @@ jobs:
         name: veracode-artifact
         path: /__w/veracode/veracode/veracode-artifacts/*
         if-no-files-found: error
+
+    # - name: Package the application
+    #   id: application_package
+    #   env:
+    #     VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
+    #     VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
+    #   run: |
+    #     cd veracode-helper/helper/cli
+    #     echo "veracode-helper/helper/cli"
+    #     ls -lart
+    #     cliFile=$(ls -1 . | head -n 1)
+    #     cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
+    #     tar -zxvf $cliFile
+    #     cd $cliFileName
+    #     export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
+    #     cd /__w/veracode
+    #     echo "/__w/veracode"
+    #     ls -lart
+    #     echo "/__w/veracode/veracode"
+    #     cd /__w/veracode/veracode
+    #     ls -lart
+    #     echo ls -lart
+    #     veracode package --source . --output veracode-artifacts --trust --debug
+    #     zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
+
+    # - name: Package error
+    #   if: failure() && steps.application_package.outcome == 'failure'
+    #   run: |
+    #     echo "::error::Veracode static scan faced a problem. Please contact your Veracode administrator for more information."
+
+    # - uses: actions/upload-artifact@v4
+    #   with:
+    #     name: veracode-artifact
+    #     path: /__w/veracode/veracode/veracode-artifacts/*
+    #     if-no-files-found: error
     
     #- name: Cache bundle dependencies
     #    uses: actions/cache@v3
