@@ -45,7 +45,7 @@ jobs:
         run: |
           ls -la
           gem build devise.gemspec
-          ls
+          ls -la
 
       # - name: Package the application
       # id: application_package
