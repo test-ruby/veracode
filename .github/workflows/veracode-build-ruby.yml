@@ -56,5 +56,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: veracode-artifact/data
+          name: veracode-artifacts/data
           path: devise-5.0.0.beta.gem
