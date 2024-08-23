@@ -43,8 +43,9 @@ jobs:
 
       - name: Package the Gem
         run: |
-          
+          ls -la
           gem build devise.gemspec
+          ls
 
       # - name: Package the application
       # id: application_package
@@ -56,4 +57,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: veracode-artifact
-          path: devise-5.0.0.beta.gem
+          path: devise-5.0.0.beta.gem/data
