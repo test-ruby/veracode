@@ -44,7 +44,7 @@ jobs:
       - name: Package the Gem
         run: |
           ls -la
-          gem build "*.gem"
+          gem build "*.gemspec"
           ls -la
 
       # - name: Package the application
