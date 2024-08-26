@@ -44,6 +44,14 @@ jobs:
       - name: Package the Gem
         run: |
           gem build "*.gemspec"
+
+      - uses: actions/checkout@v4
+        with:
+          path: 'veracode-helper'
+
+      - name: Package the application
+        id: application_package
+        run: |  
           cd veracode-helper/helper/cli
           cliFile=$(ls -1 . | head -n 1)
           cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
