@@ -51,7 +51,15 @@ jobs:
           VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
           VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
         run: |
+          cd veracode-helper/helper/cli
+          cliFile=$(ls -1 . | head -n 1)
+          cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
+          tar -zxvf $cliFile
+          cd $cliFileName
+          export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
+          cd /__w/veracode/veracode
           veracode package --source . --output veracode-artifacts --trust
+          zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
 
       - uses: actions/upload-artifact@v4
         with:
