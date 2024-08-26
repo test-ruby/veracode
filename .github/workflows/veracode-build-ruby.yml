@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest           #${{ vars.CLIENT_ENV || 'ubuntu-latest' }}
     container:
-      image: ruby:latest     #${{ vars.CLIENT_IMAGE_URL || 'veracode/scm-packaging' }}:${{ vars.CLIENT_IMAGE_TAG || '2.1.0' }}
+      image: veracode/scm-packaging:2.1.0     #${{ vars.CLIENT_IMAGE_URL || 'veracode/scm-packaging' }}:${{ vars.CLIENT_IMAGE_TAG || '2.1.0' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,15 +41,11 @@ jobs:
       - name: Install Dependencies
         run: bundle install --path vendor/bundle
 
-      - uses: actions/checkout@v4
-        with:
-          path: 'veracode-helper'
-
       - name: Package the Gem
         run: |
           gem build "*.gemspec"
-          cd veracode-helper/helper/cli
-          cd /__w/veracode/veracode
+#          cd veracode-helper/helper/cli
+#          cd /__w/veracode/veracode
           veracode package --source . --output veracode-artifacts --trust
 
 #      - name: Package the application
