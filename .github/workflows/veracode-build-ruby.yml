@@ -45,6 +45,10 @@ jobs:
         run: |
           gem build "*.gemspec"
 
+      - uses: actions/checkout@v4
+        with:
+          path: 'veracode-helper'
+
       - name: Package the application
         id: application_package
         env:
