@@ -48,6 +48,7 @@ jobs:
       - name: Package the Gem
         run: |
           gem build "*.gemspec"
+          cd veracode-helper/helper/cli
           cd /__w/veracode/veracode
           veracode package --source . --output veracode-artifacts --trust
 
