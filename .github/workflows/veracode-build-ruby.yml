@@ -41,14 +41,15 @@ jobs:
       - name: Install Dependencies
         run: bundle install --path vendor/bundle
 
-      - name: Package the Gem
-        run: |
-          gem build "*.gemspec"
-          veracode package --source . --output veracode-artifacts --trust
-
       - uses: actions/checkout@v4
         with:
           path: 'veracode-helper'
+
+      - name: Package the Gem
+        run: |
+          gem build "*.gemspec"
+          cd /__w/veracode/veracode
+          veracode package --source . --output veracode-artifacts --trust
 
 #      - name: Package the application
 #        id: application_package
