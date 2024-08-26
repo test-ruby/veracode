@@ -63,7 +63,6 @@ jobs:
           export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
           cd /__w/veracode/veracode
           veracode package --source . --output veracode-artifacts --trust
-          zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
 
       - uses: actions/upload-artifact@v4
         with:
