@@ -43,16 +43,15 @@ jobs:
 
       - name: Package the Gem
         run: |
-          ls -la
           gem build "*.gemspec"
-          ls -la
 
-      # - name: Package the application
-      # id: application_package
-      # env:
-      #   VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
-      #   VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
-      # run: |
+      - name: Package the application
+        id: application_package
+        env:
+          VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
+          VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
+        run: |
+          veracode package --source . --output veracode-artifacts --trust
 
       - uses: actions/upload-artifact@v4
         with:
