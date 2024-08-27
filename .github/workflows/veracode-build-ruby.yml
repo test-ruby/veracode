@@ -25,10 +25,10 @@ jobs:
           ref: ${{ inputs.ref }}
           token: ${{ inputs.token }}
 
-      #- name: Set up Ruby
-      #  uses: ruby/setup-ruby@v1
-      #  with:
-      #    bundler-cache: true        #ruby-version: '~> 3.2'
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+         ruby-version: s3.3.4
 
       - name: Cache bundle dependencies
         uses: actions/cache@v3
