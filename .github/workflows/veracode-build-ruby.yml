@@ -25,13 +25,6 @@ jobs:
           ref: ${{ inputs.ref }}
           token: ${{ inputs.token }}
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-         ruby-version: 3.3
-         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - run: bundle exec rake
-
       - name: Cache bundle dependencies
         uses: actions/cache@v3
         with:
@@ -45,7 +38,7 @@ jobs:
 
       - name: Package the Gem
         run: |
-          gem build "*.gemspec"
+          gem build *.gemspec
 
       - uses: actions/checkout@v4
         with:
@@ -53,7 +46,7 @@ jobs:
 
       - name: Package the application
         id: application_package
-        run: |  
+        run: |
           cd veracode-helper/helper/cli
           cliFile=$(ls -1 . | head -n 1)
           cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
@@ -62,25 +55,6 @@ jobs:
           export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
           cd /__w/veracode/veracode
           veracode package --source . --output veracode-artifacts --trust
-
-#      - name: Package the application
-#        id: application_package
-#        env:
-#          VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
-#          VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
-#        run: |
-#          cd veracode-helper/helper/cli
-#          cliFile=$(ls -1 . | head -n 1)
-#          cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
-#          tar -zxvf $cliFile
-#          cd $cliFileName
-#          export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
-#          cd /__w/veracode/veracode
-#          veracode package --source . --output veracode-artifacts --trust
-
-#      - uses: actions/checkout@v4
-#        with:
-#          path: 'veracode-helper'
 
       - uses: actions/upload-artifact@v4
         with:
