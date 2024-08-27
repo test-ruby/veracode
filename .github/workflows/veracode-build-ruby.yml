@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest           #${{ vars.CLIENT_ENV || 'ubuntu-latest' }}
     container:
-      image: ruby:latest     #${{ vars.CLIENT_IMAGE_URL || 'veracode/scm-packaging' }}:${{ vars.CLIENT_IMAGE_TAG || '2.1.0' }}
+      image: ruby:3.3     #${{ vars.CLIENT_IMAGE_URL || 'veracode/scm-packaging' }}:${{ vars.CLIENT_IMAGE_TAG || '2.1.0' }}
     steps:
       - uses: actions/checkout@v4
         with:
